@@ -38,29 +38,23 @@ while True:
         continue
     print(readings)
     boiler_supply_temp = c_to_f(readings[0]/10)
-    print('Supply ', boiler_supply_temp)
     boiler_return_temp = c_to_f(readings[1])
-    print('Return ', boiler_return_temp)
     boiler_flue_temp = c_to_f(readings[3])
-    print('Flue ', boiler_flue_temp)
     boiler_outdoor_temp = (readings[4])
     if boiler_outdoor_temp == 32768:
                 boiler_outdoor_temp = 0
-    print('Outdoor ', boiler_outdoor_temp)
     boiler_flame_ion = readings[6]
-    print('Flame Ion ', boiler_flame_ion)
     boiler_firing_rate = readings[7]
-    print('Firing rate', boiler_firing_rate)
     boiler_set_point = (readings[8])
     if boiler_set_point == 32768:
                 boiler_set_point = 0
-    print('Set Point ', boiler_set_point)
 
+    logging.info("Boiler data: Supply Temp[{:0.2f}], Return Temp[{:0.2f}], Flue Temp[{:0.2f}], Firing Rate[{:0.2%}], Set Point[{:0.2f}], Outdoor Temp[{:0.2f}]".format(boiler_supply_temp, boiler_return_temp, boiler_flue_temp, boiler_firing_rate, boiler_set_point, boiler_outdoor_temp))
     #Send it to the doghole
     statsd.gauge('boiler_supply_temp_p', boiler_supply_temp, tags=["TriangleTube:Boiler"])
     statsd.gauge('boiler_return_temp_p', boiler_return_temp, tags=["TriangleTube:Boiler"])
     statsd.gauge('boiler_flue_temp_p', boiler_flue_temp, tags=["TriangleTube:Boiler"])
-    statsd.set('boiler_outdoor_temp_p', boiler_outdoor_temp, tags=["TriangleTube:Boiler"])
+    statsd.gauge('boiler_outdoor_temp_p', boiler_outdoor_temp, tags=["TriangleTube:Boiler"])
     statsd.gauge('boiler_flame_ion_p', boiler_flame_ion, tags=["TriangleTube:Boiler"])
     statsd.gauge('boiler_firing_rate_p', boiler_firing_rate, tags=["TriangleTube:Boiler"])
     statsd.gauge('boiler_set_point_p', boiler_set_point, tags=["TriangleTube:Boiler"])
