@@ -45,8 +45,8 @@ while True:
                 boiler_outdoor_temp = 0
     boiler_flame_ion = readings[6]
     boiler_firing_rate = readings[7]
-    boiler_set_point = (readings[8])
-    if boiler_set_point == 32768:
+    boiler_set_point = c_to_f(readings[8])
+    if boiler_set_point == 59014.40:
                 boiler_set_point = 0
 
     logging.info("Boiler data: Supply Temp[{:0.2f}], Return Temp[{:0.2f}], Flue Temp[{:0.2f}], Firing Rate[{:0.2%}], Set Point[{:0.2f}], Outdoor Temp[{:0.2f}]".format(boiler_supply_temp, boiler_return_temp, boiler_flue_temp, boiler_firing_rate, boiler_set_point, boiler_outdoor_temp))
