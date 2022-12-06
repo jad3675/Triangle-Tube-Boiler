@@ -57,3 +57,12 @@ GPIO.add_event_detect(3, GPIO.BOTH, callback=handle_pin_change)
 GPIO.add_event_detect(4, GPIO.BOTH, callback=handle_pin_change)
 
 # Main loop
+while True:
+    # Check for changes in the state of the GPIO pins
+    if GPIO.event_detected(2) or GPIO.event_detected(3) or GPIO.event_detected(4):
+        # Call the callback function to handle any changes that were detected
+        handle_pin_change()
+        
+    # Sleep for a short period of time before checking again
+    sleep(1)
+
