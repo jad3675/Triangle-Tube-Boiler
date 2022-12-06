@@ -1,2 +1,2 @@
 # Triangle-Tube-Boiler
-Interfacing with a Traingle Tube boiler via modbus
+Interfacing with a Triangle Tube boiler via modbus
