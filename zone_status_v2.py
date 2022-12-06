@@ -25,19 +25,35 @@ GPIO.setup(2,GPIO.IN)
 GPIO.setup(3,GPIO.IN)
 GPIO.setup(4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-# Define a function to check the status of a zone and report it
-def check_zone(zone_name, pin):
+# Define a callback function to be called when the state of a pin changes
+def handle_pin_change(pin):
     # Check the current state of the pin
     if GPIO.input(pin):
         # Pin is high (on)
-        logging.info("%s Valve is open!", zone_name)
-        statsd.gauge('%s Zone Status' % zone_name, 1, tags=["Zones:%s" % zone_name])
+        if pin == 2:
+            logging.info("Basement Valve Open!")
+            statsd.gauge('Basement Zone Status', 1, tags=["Zones:Basement"])
+        elif pin == 3:
+            logging.info("1st Floor Valve Open!")
+            statsd.gauge('First Floor Zone Status', 1, tags=["Zones:First"])
+        elif pin == 4:
+            logging.info("2nd Floor Valve is open!")
+            statsd.gauge('Second Floor Zone Status', 1, tags=["Zones:Second"])
     else:
         # Pin is low (off)
-        logging.info("%s Valve is closed!", zone_name)
-        statsd.gauge('%s Zone Status' % zone_name, 0, tags=["Zones:%s" % zone_name])
+        if pin == 2:
+            logging.info("Basement valve is closed!")
+            statsd.gauge('Basement Zone Status', 0, tags=["Zones:Basement"])
+        elif pin == 3:
+            logging.info("1st Floor valve is closed!")
+            statsd.gauge('First Floor Zone Status', 0, tags=["Zones:First"])
+        elif pin == 4:
+            logging.info("2nd Floor Valve is closed!")
+            statsd.gauge('Second Floor Zone Status', 0, tags=["Zones:Second"])
 
 # Register the callback function to be called when the state of a pin changes
-GPIO.add_event_detect(2, GPIO.BOTH, callback=check_zone, bouncetime=50, args=["Basement", 2])
-GPIO.add_event_detect(3, GPIO.BOTH, callback=check_zone, bouncetime=50, args=["First Floor", 3])
-GPIO.add_event_detect(4, GPIO.BOTH, callback=
+GPIO.add_event_detect(2, GPIO.BOTH, callback=handle_pin_change)
+GPIO.add_event_detect(3, GPIO.BOTH, callback=handle_pin_change)
+GPIO.add_event_detect(4, GPIO.BOTH, callback=handle_pin_change)
+
+# Main loop
